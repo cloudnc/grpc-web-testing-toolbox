@@ -1,5 +1,5 @@
 {
-  "pkgRoot": "dist/PKG_ROOT_VALUE",
+  "pkgRoot": "dist",
   "branches": [
     "master"
   ]
