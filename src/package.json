@@ -1,5 +1,5 @@
 {
-  "name": "@cloudnc/grpc-web-testing-toolbox-playwright",
+  "name": "@cloudnc/grpc-web-testing-toolbox",
   "version": "0.0.0",
   "main": "./index.js",
   "types": "./index.d.ts",

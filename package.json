@@ -7,7 +7,7 @@
   "types": "dist/types.d.ts",
   "scripts": {
     "tsc": "tsc",
-    "build": "yarn tsc && cp src/base/package.json dist/base && cp src/playwright/package.json dist/playwright"
+    "build": "rm -rf dist && yarn tsc && cp src/package.json dist"
   },
   "dependencies": {
     "@improbable-eng/grpc-web": "0.15.0",
