@@ -1,0 +1,6 @@
+{
+  "pkgRoot": "dist/PKG_ROOT_VALUE",
+  "branches": [
+    "master"
+  ]
+}
