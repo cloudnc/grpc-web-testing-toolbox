@@ -27,10 +27,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: sed -i 's/PKG_ROOT_VALUE/base/g' .releaserc && npx semantic-release
+        run: cp .releaserc.template .releaserc && sed -i 's/PKG_ROOT_VALUE/base/g' .releaserc && npx semantic-release
       - name: Release playwright
         if: contains('refs/heads/master', github.ref)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: sed -i 's/PKG_ROOT_VALUE/playwright/g' .releaserc && npx semantic-release
+        run: rm -f .releaserc && cp .releaserc.template .releaserc && sed -i 's/PKG_ROOT_VALUE/playwright/g' .releaserc && npx semantic-release
