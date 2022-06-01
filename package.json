@@ -10,6 +10,9 @@
     "watch": "parcel watch",
     "build": "parcel build"
   },
+  "dependencies": {
+    "grpc": "1.24.11"
+  },
   "devDependencies": {
     "@parcel/packager-ts": "2.6.0",
     "@parcel/transformer-typescript-types": "2.6.0",
