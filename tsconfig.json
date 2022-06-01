@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
     "strict": true,
-    "rootDir": ".",
-    "sourceRoot": "/",
+    "rootDir": "./src",
     "module": "esnext",
+    "moduleResolution": "node",
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
-    "sourceMap": true
+    "sourceMap": false,
+    "declaration": true,
+    "outDir": "dist"
   },
   "include": ["src/**/*"],
   "exclude": [".parcel-cache", "dist", "node_modules"]

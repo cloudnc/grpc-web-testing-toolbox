@@ -1,11 +1,12 @@
 {
   "name": "grpc-web-testing-toolbox",
   "version": "0.0.0",
-  "source": "src/index.ts",
+  "source": "src/base/index.ts",
   "main": "dist/main.js",
   "module": "dist/module.js",
   "types": "dist/types.d.ts",
   "scripts": {
+    "tsc": "tsc",
     "watch": "parcel watch",
     "build": "parcel build"
   },
