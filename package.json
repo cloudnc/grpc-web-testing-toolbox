@@ -11,7 +11,10 @@
     "build": "parcel build"
   },
   "dependencies": {
-    "grpc": "1.24.11"
+    "@improbable-eng/grpc-web": "0.15.0",
+    "@playwright/test": "1.22.2",
+    "grpc": "1.24.11",
+    "playwright-core": "1.22.2"
   },
   "devDependencies": {
     "@parcel/packager-ts": "2.6.0",
