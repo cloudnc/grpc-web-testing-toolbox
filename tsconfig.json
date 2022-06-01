@@ -12,5 +12,5 @@
     "outDir": "dist"
   },
   "include": ["src/**/*"],
-  "exclude": [".parcel-cache", "dist", "node_modules"]
+  "exclude": ["dist", "node_modules"]
 }
