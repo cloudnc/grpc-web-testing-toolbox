@@ -13,6 +13,9 @@
     "stub"
   ],
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "grpc": "1.24.11"
   },
