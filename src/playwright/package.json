@@ -1,0 +1,29 @@
+{
+  "name": "@cloudnc/grpc-web-testing-toolbox-playwright",
+  "version": "0.0.0",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "keywords": [
+    "proto",
+    "grpc",
+    "typescript",
+    "test",
+    "testing",
+    "mock",
+    "stub",
+    "playwright"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@improbable-eng/grpc-web": "0.15.0",
+    "@playwright/test": "1.22.2",
+    "grpc": "1.24.11",
+    "playwright-core": "1.22.2"
+  },
+  "peerDependencies": {
+    "@improbable-eng/grpc-web": "0.15.0",
+    "@playwright/test": "1.22.2",
+    "grpc": "1.24.11",
+    "playwright-core": "1.22.2"
+  }
+}
