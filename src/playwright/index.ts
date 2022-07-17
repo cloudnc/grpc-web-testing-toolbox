@@ -1,11 +1,7 @@
-import { expect, Page } from '@playwright/test';
-import { grpc } from '@improbable-eng/grpc-web';
-import {
-  GrpcErrorResponse,
-  grpcResponseToBuffer,
-  GrpcSuccessResponse,
-} from '../base';
-import { Request } from 'playwright-core';
+import {expect, Page} from '@playwright/test';
+import {grpc} from '@improbable-eng/grpc-web';
+import {GrpcResponse, grpcResponseToBuffer,} from '../base';
+import {Request} from 'playwright-core';
 
 export interface UnaryMethodDefinitionish
   extends grpc.UnaryMethodDefinition<any, any> {
@@ -41,7 +37,7 @@ function unframeRequest(requestBody: Uint8Array): Uint8Array {
 export function mockGrpcUnary(
   page: Page,
   rpc: UnaryMethodDefinitionish,
-  response: GrpcSuccessResponse | GrpcErrorResponse
+  response: GrpcResponse | ((request: Uint8Array|null) => GrpcResponse)
 ): MockedGrpcCall {
   const url = `/${rpc.service.serviceName}/${rpc.methodName}`;
 
@@ -52,11 +48,19 @@ export function mockGrpcUnary(
       'ALL gRPC requests should be a POST request'
     ).toBe('POST');
 
-    // error messages need to have a zero length message field to be considered valid
-    const grpcResponse = grpcResponseToBuffer(response);
+    let grpcResponse: GrpcResponse
+
+    if (typeof response === 'function') {
+      const requestBody = route.request().postDataBuffer();
+      grpcResponse = response(!requestBody ? null : unframeRequest(requestBody));
+    } else {
+      grpcResponse = response;
+    }
+
+    const grpcResponseBody = grpcResponseToBuffer(grpcResponse)
 
     return route.fulfill({
-      body: grpcResponse,
+      body: grpcResponseBody,
       contentType: 'application/grpc-web+proto',
       headers: {
         'Access-Control-Allow-Origin': '*',
