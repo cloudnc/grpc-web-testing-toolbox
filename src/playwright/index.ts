@@ -34,6 +34,11 @@ function unframeRequest(requestBody: Uint8Array): Uint8Array {
   return new Uint8Array(requestBody).slice(5);
 }
 
+export function readGrpcRequest(request: Request): Uint8Array | null {
+  const requestBody = request.postDataBuffer();
+  return !requestBody ? null : unframeRequest(requestBody);
+}
+
 export function mockGrpcUnary(
   page: Page,
   rpc: UnaryMethodDefinitionish,
@@ -48,16 +53,11 @@ export function mockGrpcUnary(
       'ALL gRPC requests should be a POST request'
     ).toBe('POST');
 
-    let grpcResponse: GrpcResponse
+    const grpcResponse = typeof response === 'function'
+      ? response(readGrpcRequest(route.request()))
+      : response;
 
-    if (typeof response === 'function') {
-      const requestBody = route.request().postDataBuffer();
-      grpcResponse = response(!requestBody ? null : unframeRequest(requestBody));
-    } else {
-      grpcResponse = response;
-    }
-
-    const grpcResponseBody = grpcResponseToBuffer(grpcResponse)
+    const grpcResponseBody = grpcResponseToBuffer(grpcResponse);
 
     return route.fulfill({
       body: grpcResponseBody,
@@ -76,8 +76,7 @@ export function mockGrpcUnary(
         }
 
         if (requestPredicate) {
-          const messageBody = req.postDataBuffer();
-          const unframed = !messageBody ? null : unframeRequest(messageBody);
+          const unframed = readGrpcRequest(req);
           return requestPredicate(unframed, req);
         }
 
@@ -86,8 +85,7 @@ export function mockGrpcUnary(
 
       await page.waitForResponse((resp) => resp.url().includes(url));
 
-      const messageBody = request.postDataBuffer();
-      const requestMessage = !messageBody ? null : unframeRequest(messageBody);
+      const requestMessage = readGrpcRequest(request);
 
       return { requestMessage };
     },
