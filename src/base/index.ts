@@ -1,4 +1,4 @@
-import { status as Status } from 'grpc';
+import {status as Status} from 'grpc';
 
 export interface GrpcErrorResponse {
   status: Status;
@@ -8,6 +8,8 @@ export interface GrpcErrorResponse {
 export interface GrpcSuccessResponse {
   message: Uint8Array;
 }
+
+export type GrpcResponse = GrpcSuccessResponse | GrpcErrorResponse
 
 function fourBytesLength(sized: { length: number }): Uint8Array {
   const arr = new Uint8Array(4); // an Int32 takes 4 bytes
@@ -23,8 +25,10 @@ export class GrpcUnknownStatus extends Error {
 }
 
 export function grpcResponseToBuffer(
-  response: GrpcSuccessResponse | GrpcErrorResponse
+  response: GrpcResponse
 ): Buffer {
+
+  // error messages need to have a zero length message field to be considered valid
   const message = 'message' in response ? response.message : new Uint8Array();
 
   // all success responses have status OK
