@@ -7,16 +7,19 @@
   "types": "dist/types.d.ts",
   "scripts": {
     "tsc": "tsc",
-    "build": "rm -rf dist && yarn tsc && cp src/package.json dist && cp README.md dist && cp LICENSE.md dist"
+    "build": "rm -rf dist && yarn tsc && cp src/package.json dist && cp README.md dist && cp LICENSE.md dist",
+    "format": "prettier --write src/**/*",
+    "format:check": "prettier --check src/**/*"
   },
   "dependencies": {
+    "@grpc/grpc-js": "1.6.10",
     "@improbable-eng/grpc-web": "0.15.0",
     "@playwright/test": "1.22.2",
     "google-protobuf": "3.14.0",
-    "grpc": "1.24.11",
     "playwright-core": "1.22.2"
   },
   "devDependencies": {
+    "prettier": "^2.7.1",
     "semantic-release": "19.0.2",
     "typescript": "4.7.2"
   }

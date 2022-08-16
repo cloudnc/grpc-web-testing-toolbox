@@ -20,6 +20,8 @@ jobs:
           node-version: 16.14.2
       - name: Install dependencies
         run: yarn --frozen-lockfile --non-interactive --no-progress
+      - name: Format check
+        run: yarn format:check
       - name: Build Lib
         run: yarn build
       - name: Release

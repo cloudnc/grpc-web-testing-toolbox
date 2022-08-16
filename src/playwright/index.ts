@@ -1,7 +1,7 @@
-import {expect, Page} from '@playwright/test';
-import {grpc} from '@improbable-eng/grpc-web';
-import {GrpcResponse, grpcResponseToBuffer,} from '../base';
-import {Request} from 'playwright-core';
+import { expect, Page } from "@playwright/test";
+import { grpc } from "@improbable-eng/grpc-web";
+import { GrpcResponse, grpcResponseToBuffer } from "../base";
+import { Request } from "playwright-core";
 
 export interface UnaryMethodDefinitionish
   extends grpc.UnaryMethodDefinition<any, any> {
@@ -42,28 +42,29 @@ export function readGrpcRequest(request: Request): Uint8Array | null {
 export function mockGrpcUnary(
   page: Page,
   rpc: UnaryMethodDefinitionish,
-  response: GrpcResponse | ((request: Uint8Array|null) => GrpcResponse)
+  response: GrpcResponse | ((request: Uint8Array | null) => GrpcResponse)
 ): MockedGrpcCall {
   const url = `/${rpc.service.serviceName}/${rpc.methodName}`;
 
   // note this wildcard route url base is done in order to match both localhost and deployed service usages.
-  page.route('**' + url, (route) => {
+  page.route("**" + url, (route) => {
     expect(
       route.request().method(),
-      'ALL gRPC requests should be a POST request'
-    ).toBe('POST');
+      "ALL gRPC requests should be a POST request"
+    ).toBe("POST");
 
-    const grpcResponse = typeof response === 'function'
-      ? response(readGrpcRequest(route.request()))
-      : response;
+    const grpcResponse =
+      typeof response === "function"
+        ? response(readGrpcRequest(route.request()))
+        : response;
 
     const grpcResponseBody = grpcResponseToBuffer(grpcResponse);
 
     return route.fulfill({
       body: grpcResponseBody,
-      contentType: 'application/grpc-web+proto',
+      contentType: "application/grpc-web+proto",
       headers: {
-        'Access-Control-Allow-Origin': '*',
+        "Access-Control-Allow-Origin": "*",
       },
     });
   });
