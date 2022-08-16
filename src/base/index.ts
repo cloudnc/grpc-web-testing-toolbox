@@ -1,4 +1,4 @@
-import {status as Status} from 'grpc';
+import {status as Status} from '@grpc/grpc-js';
 
 export interface GrpcErrorResponse {
   status: Status;
