@@ -1,4 +1,4 @@
-import {status as Status} from '@grpc/grpc-js';
+import { status as Status } from "@grpc/grpc-js";
 
 export interface GrpcErrorResponse {
   status: Status;
@@ -9,7 +9,7 @@ export interface GrpcSuccessResponse {
   message: Uint8Array;
 }
 
-export type GrpcResponse = GrpcSuccessResponse | GrpcErrorResponse
+export type GrpcResponse = GrpcSuccessResponse | GrpcErrorResponse;
 
 function fourBytesLength(sized: { length: number }): Uint8Array {
   const arr = new Uint8Array(4); // an Int32 takes 4 bytes
@@ -24,19 +24,16 @@ export class GrpcUnknownStatus extends Error {
   }
 }
 
-export function grpcResponseToBuffer(
-  response: GrpcResponse
-): Buffer {
-
+export function grpcResponseToBuffer(response: GrpcResponse): Buffer {
   // error messages need to have a zero length message field to be considered valid
-  const message = 'message' in response ? response.message : new Uint8Array();
+  const message = "message" in response ? response.message : new Uint8Array();
 
   // all success responses have status OK
-  const status = 'status' in response ? response.status : Status.OK;
+  const status = "status" in response ? response.status : Status.OK;
   // error statuses may the detail field to denote a custom error message, otherwise use the string version of the status
   let grpcMessage: string | undefined;
 
-  if ('detail' in response) {
+  if ("detail" in response) {
     grpcMessage = response.detail;
   } else {
     const currentStatus = Object.entries(Status).find(
