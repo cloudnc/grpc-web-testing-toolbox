@@ -20,7 +20,8 @@
   "peerDependencies": {
     "@improbable-eng/grpc-web": "^0.15.0",
     "@playwright/test": "^1.22.2",
-    "grpc": "^1.24.11",
-    "playwright-core": "^1.22.2"
+    "playwright-core": "^1.22.2",
+    "@grpc/grpc-js": "^1.6.10",
+    "google-protobuf": "^3.14.0"
   }
 }
