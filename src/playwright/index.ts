@@ -39,15 +39,15 @@ export function readGrpcRequest(request: Request): Uint8Array | null {
   return !requestBody ? null : unframeRequest(requestBody);
 }
 
-export function mockGrpcUnary(
+export async function mockGrpcUnary(
   page: Page,
   rpc: UnaryMethodDefinitionish,
   response: GrpcResponse | ((request: Uint8Array | null) => GrpcResponse)
-): MockedGrpcCall {
+): Promise<MockedGrpcCall> {
   const url = `/${rpc.service.serviceName}/${rpc.methodName}`;
 
   // note this wildcard route url base is done in order to match both localhost and deployed service usages.
-  page.route("**" + url, (route) => {
+  await page.route("**" + url, (route) => {
     expect(
       route.request().method(),
       "ALL gRPC requests should be a POST request"
