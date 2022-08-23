@@ -48,7 +48,7 @@ test.describe('Some test wrapper', () => {
   test('Make sure a grpc call is made and is successful', async ({ page }) => {
     // start by building a mock for the unary call that will be done
     // for example as soon as a given page is loaded
-    const mock = mockGrpcUnary(page, YourUnaryCall, {
+    const mock = await mockGrpcUnary(page, YourUnaryCall, {
       message: YourUnaryCallResponse.encode({
         // all the content of the response goes here as a classic JS object
         // this is the mock data that will be passed in the response
