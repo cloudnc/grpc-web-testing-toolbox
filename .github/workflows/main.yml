@@ -9,15 +9,15 @@ jobs:
   build:
     # Machine environment:
     # https://help.github.com/en/articles/software-in-virtual-environments-for-github-actions#ubuntu-1804-lts
-    # We specify the Node.js version manually below, and use versioned Chrome from Puppeteer.
-    runs-on: ubuntu-18.04
+    # We specify the Node.js version manually below
+    runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v1
-      - name: Use Node.js 16.14.2
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - name: Use Node.js 18.4.0
+        uses: actions/setup-node@v3
         with:
-          node-version: 16.14.2
+          node-version: 18.4.0
       - name: Install dependencies
         run: yarn --frozen-lockfile --non-interactive --no-progress
       - name: Format check
