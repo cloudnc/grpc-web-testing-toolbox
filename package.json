@@ -14,9 +14,9 @@
   "dependencies": {
     "@grpc/grpc-js": "1.6.10",
     "@improbable-eng/grpc-web": "0.15.0",
-    "@playwright/test": "1.22.2",
+    "@playwright/test": "1.35.1",
     "google-protobuf": "3.14.0",
-    "playwright-core": "1.22.2"
+    "playwright-core": "1.35.1"
   },
   "devDependencies": {
     "prettier": "^2.7.1",
