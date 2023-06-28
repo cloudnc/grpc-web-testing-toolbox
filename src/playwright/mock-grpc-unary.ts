@@ -7,35 +7,26 @@ export async function mockGrpcUnary(
   page: Page,
   rpc: UnaryMethodDefinitionish,
   response: GrpcResponse | ((request: Uint8Array | null) => GrpcResponse),
-  mockAtContextLevel: boolean = false
+  mockAtContextLevel: boolean = false,
 ): Promise<MockedGrpcCall> {
   const url = `/${rpc.service.serviceName}/${rpc.methodName}`;
 
   // note this wildcard route url base is done in order to match both localhost and deployed service usages.
-  await (mockAtContextLevel ? page.context() : page).route(
-    '**' + url,
-    (route) => {
-      expect(
-        route.request().method(),
-        'ALL gRPC requests should be a POST request'
-      ).toBe('POST');
+  await (mockAtContextLevel ? page.context() : page).route('**' + url, (route) => {
+    expect(route.request().method(), 'ALL gRPC requests should be a POST request').toBe('POST');
 
-      const grpcResponse =
-        typeof response === 'function'
-          ? response(readGrpcRequest(route.request()))
-          : response;
+    const grpcResponse = typeof response === 'function' ? response(readGrpcRequest(route.request())) : response;
 
-      const grpcResponseBody = grpcResponseToBuffer(grpcResponse);
+    const grpcResponseBody = grpcResponseToBuffer(grpcResponse);
 
-      return route.fulfill({
-        body: grpcResponseBody,
-        contentType: 'application/grpc-web+proto',
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-        },
-      });
-    }
-  );
+    return route.fulfill({
+      body: grpcResponseBody,
+      contentType: 'application/grpc-web+proto',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
+  });
 
   return {
     async waitForMock(requestPredicate?) {

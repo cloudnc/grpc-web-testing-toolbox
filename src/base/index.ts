@@ -1,4 +1,4 @@
-import { Metadata, status as Status } from "@grpc/grpc-js";
+import { Metadata, status as Status } from '@grpc/grpc-js';
 
 export interface GrpcErrorResponse {
   status: Status;
@@ -22,7 +22,7 @@ function fourBytesLength(sized: { length: number }): Uint8Array {
 
 export function decodeGrpcWebBody(bodyBuffer: Buffer): GrpcResponse {
   if (bodyBuffer.length === 0) {
-    throw new Error("Body has zero length, cannot decode!");
+    throw new Error('Body has zero length, cannot decode!');
   }
 
   const bodyRaw = new Uint8Array(bodyBuffer);
@@ -53,7 +53,7 @@ export function decodeGrpcWebBody(bodyBuffer: Buffer): GrpcResponse {
   const trailersHeader = 0x80;
 
   if (bodyRaw.at(offset++) !== trailersHeader) {
-    throw new Error("Expected trailers header 0x80");
+    throw new Error('Expected trailers header 0x80');
   }
 
   const trailersLength = readInt32Length(bodyRaw, offset);
@@ -66,8 +66,8 @@ export function decodeGrpcWebBody(bodyBuffer: Buffer): GrpcResponse {
 
   const trailers = new Metadata();
 
-  trailersString.split("\r\n").forEach((trailer) => {
-    const [key, value] = trailer.split(":", 2);
+  trailersString.split('\r\n').forEach((trailer) => {
+    const [key, value] = trailer.split(':', 2);
     trailers.set(key, value);
   });
 
@@ -75,7 +75,7 @@ export function decodeGrpcWebBody(bodyBuffer: Buffer): GrpcResponse {
     return {
       status,
       trailers,
-      detail: trailers.get("grpc-message")[0] as string | undefined,
+      detail: trailers.get('grpc-message')[0] as string | undefined,
     };
   }
 
@@ -99,19 +99,17 @@ export class GrpcUnknownStatus extends Error {
 
 export function grpcResponseToBuffer(response: GrpcResponse): Buffer {
   // error messages need to have a zero length message field to be considered valid
-  const message = "message" in response ? response.message : new Uint8Array();
+  const message = 'message' in response ? response.message : new Uint8Array();
 
   // all success responses have status OK
-  const status = "status" in response ? response.status : Status.OK;
+  const status = 'status' in response ? response.status : Status.OK;
   // error statuses may the detail field to denote a custom error message, otherwise use the string version of the status
   let grpcMessage: string | undefined;
 
-  if ("detail" in response) {
+  if ('detail' in response) {
     grpcMessage = response.detail;
   } else {
-    const currentStatus = Object.entries(Status).find(
-      ([, code]) => code === status
-    );
+    const currentStatus = Object.entries(Status).find(([, code]) => code === status);
 
     if (!currentStatus) {
       throw new GrpcUnknownStatus(status);
