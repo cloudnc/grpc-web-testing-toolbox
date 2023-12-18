@@ -25,7 +25,7 @@ jobs:
       - name: Build Lib
         run: yarn build
       - name: Release
-        if: contains('refs/heads/master', github.ref)
+        if: contains('refs/heads/master refs/heads/feat-allow-to-pass-promise-as-response', github.ref)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

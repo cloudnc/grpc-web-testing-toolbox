@@ -1,6 +1,11 @@
 {
   "pkgRoot": "dist",
   "branches": [
-    "master"
+    "master",
+    {
+      "name": "feat-allow-to-pass-promise-as-response",
+      "channel": "feat-allow-to-pass-promise-as-response",
+      "prerelease": true
+    }
   ]
 }
