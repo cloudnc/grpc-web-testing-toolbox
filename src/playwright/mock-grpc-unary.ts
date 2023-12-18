@@ -6,20 +6,24 @@ import { readGrpcRequest } from './read-grpc-request';
 export async function mockGrpcUnary(
   page: Page,
   rpc: UnaryMethodDefinitionish,
-  response: GrpcResponse | ((request: Uint8Array | null) => GrpcResponse),
+  response:
+    | GrpcResponse
+    | Promise<GrpcResponse>
+    | ((request: Uint8Array | null) => GrpcResponse | Promise<GrpcResponse>),
   mockAtContextLevel: boolean = false,
 ): Promise<MockedGrpcCall> {
   const url = `/${rpc.service.serviceName}/${rpc.methodName}`;
 
   // note this wildcard route url base is done in order to match both localhost and deployed service usages.
-  await (mockAtContextLevel ? page.context() : page).route('**' + url, (route) => {
+  await (mockAtContextLevel ? page.context() : page).route('**' + url, async (route) => {
     expect(route.request().method(), 'ALL gRPC requests should be a POST request').toBe('POST');
 
-    const grpcResponse = typeof response === 'function' ? response(readGrpcRequest(route.request())) : response;
+    const grpcResponseWrapped = typeof response === 'function' ? response(readGrpcRequest(route.request())) : response;
+    const grpcResponse = await Promise.resolve(grpcResponseWrapped);
 
     const grpcResponseBody = grpcResponseToBuffer(grpcResponse);
 
-    return route.fulfill({
+    return await route.fulfill({
       body: grpcResponseBody,
       contentType: 'application/grpc-web+proto',
       headers: {
